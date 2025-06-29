@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/user/appointments/${user?.id}`);
+      const response = await fetch(`https://browsbeyond-production.up.railway.app/user/appointments/${user?.id}`);
       if (!response.ok) throw new Error('Failed to fetch');
       const data = await response.json();
 
@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
     if (!window.confirm('Cancel this appointment?')) return;
     setCancellingId(id);
     try {
-       const response = await fetch(`http://localhost:8081/enquiry/${id}/cancel`, {
+       const response = await fetch(`https://browsbeyond-production.up.railway.app/enquiry/${id}/cancel`, {
         method: "PUT",
       })
 

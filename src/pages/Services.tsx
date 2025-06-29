@@ -31,7 +31,7 @@ const Services: React.FC = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch("http://localhost:8081/service/AllService");
+      const response = await fetch("https://browsbeyond-production.up.railway.app/service/AllService");
       if (response.ok) {
         const servicesData = await response.json();
         setServices(servicesData);

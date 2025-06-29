@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
       icon: MapPin,
       title: 'Address',
       details: '123 Beauty Street, New York, NY 10001',
-      action: 'https://maps.google.com?q=123+Beauty+Street+New+York+NY+10001',
+      action: 'httpss://maps.google.com?q=123+Beauty+Street+New+York+NY+10001',
     },
     {
       icon: Clock,

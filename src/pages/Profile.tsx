@@ -62,7 +62,7 @@ const Profile: React.FC = () => {
     setIsLoading(true);
     
     try {
-      const response = await fetch(`http://localhost:8081/user/${user.id}`, {
+      const response = await fetch(`https://browsbeyond-production.up.railway.app/user/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

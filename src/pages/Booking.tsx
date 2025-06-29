@@ -47,8 +47,11 @@ const Booking: React.FC = () => {
   const fetchServices = async () => {
     setLoading(true);
     try {
-      const response = await serviceApi.getAllServices();
-      setServices(response);
+      const response = await fetch("https://browsbeyond-production.up.railway.app/service/AllService");
+       if (response.ok) {
+        const servicesData = await response.json();
+        setServices(servicesData);
+       }
 
       if(location.state?.selectedService) {
         const preSelectedService = location.state.selectedService;
@@ -67,13 +70,13 @@ const Booking: React.FC = () => {
     setLoading(true);
     try {
       const updateTime = await fetch(
-        `http://localhost:8081/service/update/${selectedDate}`,
+        `https://browsbeyond-production.up.railway.app/service/update/${selectedDate}`,
         {
           method: "PUT",
         }
       )
       const response = await fetch(
-        `http://localhost:8081/service/${selectedDate}/allTimeSlots`
+        `https://browsbeyond-production.up.railway.app/service/${selectedDate}/allTimeSlots`
       )
       if (response.ok) {
         const slots = await response.json()
@@ -82,18 +85,6 @@ const Booking: React.FC = () => {
     } catch (error) {
       console.error('Error fetching time slots:', error);
       // Mock time slots for demonstration
-      const mockSlots: TimeSlot[] = [
-        { time: '9:00 AM', available: true },
-        { time: '10:00 AM', available: true },
-        { time: '11:00 AM', available: false },
-        { time: '12:00 PM', available: true },
-        { time: '1:00 PM', available: false },
-        { time: '2:00 PM', available: true },
-        { time: '3:00 PM', available: true },
-        { time: '4:00 PM', available: true },
-        { time: '5:00 PM', available: false },
-      ];
-      setTimeSlots(mockSlots);
     } finally {
       setLoading(false);
     }
@@ -124,7 +115,7 @@ const Booking: React.FC = () => {
     
     try {
 
-       const response = await fetch("http://localhost:8081/enquiry/Appointment", {
+       const response = await fetch("https://browsbeyond-production.up.railway.app/enquiry/Appointment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

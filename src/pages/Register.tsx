@@ -62,8 +62,8 @@ const Register: React.FC = () => {
         password: formData.password,
         phone: formData.phone,
       };
-      
-       const response = await fetch("http://localhost:8081/user/register", {
+
+       const response = await fetch("https://browsbeyond-production.up.railway.app/user/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

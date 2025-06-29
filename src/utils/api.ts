@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.0.100:8081';
+const API_BASE_URL = 'https://browsbeyond-production.up.railway.app';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -22,7 +22,7 @@ async function apiRequest<T>(
   });
 
   if (!response.ok) {
-    throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
+    throw new ApiError(response.status, `http error! status: ${response.status}`);
   }
 
   return response.json();
