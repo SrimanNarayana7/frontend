@@ -30,11 +30,11 @@ export const convertTo12Hr = (time24h: string): string => {
 
 export const parseDurationToMinutes = (duration: string): number => {
   const durationLower = duration.toLowerCase();
-  
-  if (durationLower.includes('hour')) {
+
+  if (durationLower.includes('hr')) {
     const hours = parseFloat(durationLower.match(/(\d+\.?\d*)/)?.[1] || '0');
     return hours * 60;
-  } else if (durationLower.includes('min')) {
+  } else if (durationLower.includes('minutes')) {
     const minutes = parseInt(durationLower.match(/(\d+)/)?.[1] || '0', 10);
     return minutes;
   }

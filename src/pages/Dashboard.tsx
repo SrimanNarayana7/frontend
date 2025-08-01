@@ -7,6 +7,7 @@ import { getStatus, formatDate } from '../utils/timeUtils';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 
+
 const Dashboard: React.FC = () => {
   const [liveCountdowns, setLiveCountdowns] = useState<{ [id: string]: string }>({});
   const countdownInterval = useRef<NodeJS.Timeout | null>(null);
@@ -27,13 +28,15 @@ const Dashboard: React.FC = () => {
       const newCountdowns: { [id: string]: string } = {};
 
       appointments.forEach((apt) => {
-        if (apt.status === 'upcoming' && apt.date && apt.time) {
+        if (apt.status !== 'cancelled' && apt.date && apt.time) {
           const appointmentTime = new Date(`${apt.date} ${apt.time}`);
           const diffMs = appointmentTime.getTime() - now.getTime();
           const mins = Math.max(0, Math.floor(diffMs / 60000));
           const h = Math.floor(mins / 60);
           const m = mins % 60;
-          newCountdowns[apt.id] = `${h}h ${m}m left`;
+          if (getStatus(apt.date, apt.time, apt.duration) === 'upcoming') {
+            newCountdowns[apt.id] = `${h}h ${m}m left`;
+          }
         }
       });
 
@@ -50,12 +53,7 @@ const Dashboard: React.FC = () => {
       const data = await response.json();
 
       const valid = data.filter((apt: Appointment) => apt.date && apt.time);
-      const computed = valid.map((apt: Appointment) => ({
-        ...apt,
-        status: apt.status?.toLowerCase() === 'cancelled' ? 'cancelled' : getStatus(apt.date!, apt.time!, apt.duration),
-      }));
-      setAppointments(computed);
-    } catch (e) {
+      setAppointments(valid); 
       console.error('Error:', e);
       toast.error('Failed to load appointments');
     } finally {
@@ -74,12 +72,12 @@ const Dashboard: React.FC = () => {
     if (!window.confirm('Cancel this appointment?')) return;
     setCancellingId(id);
     try {
-       const response = await fetch(`https://browsbeyond-production.up.railway.app/enquiry/${id}/cancel`, {
+      const response = await fetch(`https://browsbeyond-production.up.railway.app/enquiry/${id}/cancel`, {
         method: "PUT",
-      })
+      });
 
       if (response.ok) {
-        setAppointments((prev) => prev.map((apt) => (apt.id === id ? { ...apt, status: "cancelled" } : apt)))
+        setAppointments((prev) => prev.map((apt) => (apt.id === id ? { ...apt, status: "cancelled" } : apt)));
         toast("Appointment cancelled successfully!");
       } else {
         toast.error('Failed to cancel appointment');
@@ -111,9 +109,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const upcomingOnly = appointments.filter(a => a.status === 'upcoming');
-  const inProgressOnly = appointments.filter(a => a.status === 'in-progress');
-  const completedOnly = appointments.filter(a => a.status === 'completed');
+  // Dynamic status filtering
+  const upcomingOnly = appointments.filter(a => a.status !== 'cancelled' && getStatus(a.date, a.time, a.duration) === 'upcoming');
+  const inProgressOnly = appointments.filter(a => a.status !== 'cancelled' && getStatus(a.date, a.time, a.duration) === 'in-progress');
+  const completedOnly = appointments.filter(a => a.status !== 'cancelled' && getStatus(a.date, a.time, a.duration) === 'completed');
   const cancelledOnly = appointments.filter(a => a.status === 'cancelled');
 
   if (loading) {
@@ -167,36 +166,38 @@ const Dashboard: React.FC = () => {
             <h2 className="text-2xl font-semibold text-white mb-3">{title}</h2>
             {list.length === 0 ? <p className="text-gray-500">No {title.toLowerCase()} appointments.</p> : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {list.map(apt => (
-                  <div key={apt.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div className="flex justify-between mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold text-white mb-1">{apt.servicename}</h3>
-                        <div className="text-gray-400 text-sm">
-                          {formatDate(apt.date!)} • {apt.time}
-                          {liveCountdowns[apt.id] && (
-                            <span className="ml-2 text-xs text-blue-400">({liveCountdowns[apt.id]})</span>
-                          )}
+                {list.map(apt => {
+                  const status = getStatus(apt.date, apt.time, apt.duration);
+                  return (
+                    <div key={apt.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <div className="flex justify-between mb-4">
+                        <div>
+                          <h3 className="text-xl font-semibold text-white mb-1">{apt.servicename}</h3>
+                          <div className="text-gray-400 text-sm">
+                            {formatDate(apt.date)} • {apt.time}
+                            {liveCountdowns[apt.id] && (
+                              <span className="ml-2 text-xs text-blue-400">({liveCountdowns[apt.id]})</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 border ${getStatusColor(status)}`}>
+                          {getStatusIcon(status)}<span className="text-sm text-gray-100">{status}</span>
                         </div>
                       </div>
-                      <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 border ${getStatusColor(apt.status)}`}>
-                        {getStatusIcon(apt.status)}<span className="text-l text-gray-100 text-sm">{apt.status}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-violet-300 font-semibold">Duration: {apt.duration}</span>
+                        {status === 'upcoming' && (
+                          <button
+                            className="mt-2 text-red-600 hover:text-red-700"
+                            onClick={() => handleCancelAppointment(apt.id, apt.date!, apt.time!)}
+                          >
+                            cancel
+                          </button>
+                        )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-violet-300 font-semibold">Duration: {apt.duration}</span>
-                      {getStatus(apt.date, apt.time, apt.status) === 'upcoming' && (
-                        <button
-                          className="mt-2 text-red-600 hover:text-red-700"
-                          onClick={() => handleCancelAppointment(apt.id, apt.date!, apt.time!)}
-                        >
-                          cancel
-                        </button>
-                      )}
-                    </div>
-
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -212,22 +213,25 @@ const Dashboard: React.FC = () => {
                   <p className="text-gray-500 text-sm">No {title.toLowerCase()} treatments.</p>
                 ) : (
                   <div className="divide-y divide-gray-800 border border-gray-700 rounded-lg">
-                    {list.map(apt => (
-                      <div key={apt.id} className="px-6 py-4 hover:bg-gray-800/50 transition-colors duration-200">
-                        <div className="flex justify-between">
-                          <div className="flex items-center space-x-4">
-                           <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                          <div>
-                            <h4 className="text-xl font-semibold text-white ">{apt.servicename}</h4>
-                            <p className="text-gray-400 text-sm">{formatDate(apt.date!)} at {apt.time}</p>
+                    {list.map(apt => {
+                      const status = apt.status === 'cancelled' ? 'cancelled' : getStatus(apt.date, apt.time, apt.duration);
+                      return (
+                        <div key={apt.id} className="px-6 py-4 hover:bg-gray-800/50 transition-colors duration-200">
+                          <div className="flex justify-between">
+                            <div className="flex items-center space-x-4">
+                              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                              <div>
+                                <h4 className="text-xl font-semibold text-white">{apt.servicename}</h4>
+                                <p className="text-gray-400 text-sm">{formatDate(apt.date)} at {apt.time}</p>
+                              </div>
+                            </div>
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${getStatusColor(status)}`}>
+                              {getStatusIcon(status)}<span className="text-sm text-gray-100">{status}</span>
+                            </div>
                           </div>
                         </div>
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${getStatusColor(apt.status)}`}>
-                            {getStatusIcon(apt.status)}<span className="text-l text-gray-100 text-sm">{apt.status}</span>
-                          </div>
-                      </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
