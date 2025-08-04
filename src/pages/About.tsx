@@ -1,5 +1,7 @@
 import React from 'react';
 import { Award, Heart, Users, Clock } from 'lucide-react';
+import Ashu_img from '../assets/Ashu_img.jpg';
+import jeevan_img from '../assets/jeevan_img.jpg';
 
 const About: React.FC = () => {
   const stats = [
@@ -58,7 +60,7 @@ const About: React.FC = () => {
             </div>
             <div className="relative">
               <img
-                src="https://images.pexels.com/photos/3997991/pexels-photo-3997991.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&dpr=1"
+                src={jeevan_img}
                 alt="About Us"
                 className="rounded-2xl shadow-xl"
               />
@@ -99,7 +101,7 @@ const About: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <img
-                src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&dpr=1"
+                src={Ashu_img}
                 alt="Founder"
                 className="rounded-2xl shadow-xl"
               />

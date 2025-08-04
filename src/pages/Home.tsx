@@ -31,19 +31,19 @@ const Home: React.FC = () => {
 
   const testimonials = [
     {
-      name: 'Sarah Johnson',
+      name: 'Ramya',
       image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
       rating: 5,
       text: 'Amazing experience! My eyebrows look perfect and natural. The staff was incredibly professional and made me feel comfortable throughout the entire process.'
     },
     {
-      name: 'Emily Davis',
+      name: 'kalyani',
       image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
       rating: 5,
       text: 'I love my new permanent makeup! It saves me so much time in the morning and looks absolutely beautiful. Highly recommend Brows and Beyond.'
     },
     {
-      name: 'Jessica Wilson',
+      name: 'Madhu',
       image: 'https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
       rating: 5,
       text: 'The best decision I made! Professional service, beautiful results, and amazing aftercare. I feel more confident than ever.'

@@ -82,7 +82,7 @@ const Hero: React.FC = () => {
               <p className="text-sm text-gray-300 mb-2">
                 "Absolutely amazing results! Professional and caring service."
               </p>
-              <p className="text-xs text-gray-400">- Sarah M.</p>
+              <p className="text-xs text-gray-400">- Ramya M.</p>
             </div>
           </div>
         </div>
