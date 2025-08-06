@@ -3,7 +3,7 @@ name: Deploy to cPanel via FTP
 on:
   push:
     branches:
-      - main   # Change if your default branch is not main
+      - master   # Change if your default branch is not main
 
 jobs:
   web-deploy:
