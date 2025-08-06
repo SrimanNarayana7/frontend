@@ -31,7 +31,7 @@ jobs:
 
     # 5. Deploy via FTP
     - name: FTP Deploy to cPanel
-      uses: SamKirkland/FTP-Deploy-Action@4.3.4
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
@@ -40,3 +40,4 @@ jobs:
         local-dir: dist
         server-dir: public_html
         dangerous-clean-slate: true
+
