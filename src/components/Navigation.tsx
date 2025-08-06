@@ -30,10 +30,10 @@ const Navigation: React.FC = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blush-400 to-primary-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">B&B</span>
+              <span className="text-white font-bold text-sm">M</span>
             </div>
             <span className="font-playfair text-xl font-semibold text-white">
-              Brows and Beyond
+              Manomay
             </span>
           </Link>
 
