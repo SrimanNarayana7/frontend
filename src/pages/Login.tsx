@@ -52,8 +52,8 @@ const Login: React.FC = () => {
       // Assuming the API returns user data
       const userData = {
         id: response.id || '1',
-        username: response.username || formData.username,
-        email: response.email || 'user@example.com',
+        username: response.usecomrname || formData.username,
+        email: response.email,
         phone: response.phone,
       };
       

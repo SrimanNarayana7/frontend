@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react';
 import { validateForm } from '../utils/validation';
 import toast from 'react-hot-toast';
+import { authApi } from '../utils/api';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -41,10 +42,10 @@ const Contact: React.FC = () => {
     try {
       // Here you would typically send the form data to your backend
       // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success('Message sent successfully! We\'ll get back to you soon.');
-      setFormData({ name: '', email: '', message: '' });
+      const response: any = await authApi.emailQuery(formData);
+
+      toast.success(response.message || 'Message sent successfully! We\'ll get back to you soon.');
+
     } catch (error) {
       toast.error('Failed to send message. Please try again.');
     } finally {
@@ -56,14 +57,14 @@ const Contact: React.FC = () => {
     {
       icon: Phone,
       title: 'Phone',
-      details: '+1 (555) 123-4567',
-      action: 'tel:+15551234567',
+      details: '+91 8885071333',
+      action: 'tel:+918885071333',
     },
     {
       icon: Mail,
       title: 'Email',
-      details: 'info@browsandbeyond.com',
-      action: 'mailto:info@browsandbeyond.com',
+      details: 'info@manomaypmu.com',
+      action: 'mailto:info@manomaypmu.com',
     },
     {
       icon: MapPin,
@@ -74,7 +75,7 @@ const Contact: React.FC = () => {
     {
       icon: Clock,
       title: 'Hours',
-      details: 'Mon - Sat: 9AM - 6PM\nSun: 10AM - 4PM',
+      details: 'Mon - sun: 10:00 AM - 7:05 PM',
       action: null,
     },
   ];

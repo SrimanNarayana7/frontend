@@ -41,6 +41,12 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  emailQuery: (data: { name: string; email: string; message: string }) =>
+    apiRequest('/enquiry/mailQuery', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 };
 
 // Service APIs
