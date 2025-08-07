@@ -29,6 +29,9 @@ jobs:
     - name: Build Vite project
       run: npm run build
 
+    - name: upload htaccess to dist
+      run: cp .htaccess dist/
+
     # 5. Deploy via FTP
     - name: FTP Deploy to cPanel
       uses: SamKirkland/FTP-Deploy-Action@4.3.3

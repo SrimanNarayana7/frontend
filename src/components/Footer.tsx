@@ -13,10 +13,10 @@ const Footer: React.FC = () => {
           <div className="col-span-1 lg:col-span-2">
             <Link to="/" className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-blush-400 to-primary-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold">B&B</span>
+                <span className="text-white font-bold">M</span>
               </div>
               <span className="font-playfair text-2xl font-semibold">
-                Brows and Beyond
+                Manomay
               </span>
             </Link>
             <p className="text-gray-300 mb-6 max-w-md">
